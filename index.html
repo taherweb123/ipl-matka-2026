@@ -398,6 +398,19 @@ code {
 }
 .template-info p { font-size: 10px; color: #5a8a7a; line-height: 1.7; }
 
+/* ═══ NO SHEET MSG ═══ */
+.no-sheet {
+  text-align: center; padding: 60px 20px;
+  background: var(--card); border: 1px dashed rgba(255,215,0,0.15);
+  border-radius: 14px; margin: 20px 0;
+}
+.no-sheet-icon { font-size: 40px; margin-bottom: 12px; }
+.no-sheet h3 {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 22px; letter-spacing: 2px; color: var(--gold); margin-bottom: 8px;
+}
+.no-sheet p { font-size: 11px; color: var(--muted); line-height: 1.7; max-width: 380px; margin: 0 auto 20px; }
+
 /* ═══ DATA COVERAGE PANEL ═══ */
 .coverage-panel {
   margin-top: 28px;
@@ -440,6 +453,31 @@ code {
 .cov-panter-count.empty { color: var(--muted2); }
 .cov-panter-sub { font-size: 7px; color: var(--muted); margin-top: 2px; }
 
+/* ═══ NETLIFY GUIDE ═══ */
+.hosting-guide {
+  margin-top: 36px;
+  background: rgba(99,102,241,0.04);
+  border: 1px solid rgba(99,102,241,0.12);
+  border-radius: 12px; padding: 20px 22px;
+}
+.hosting-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 16px; letter-spacing: 1.5px; color: #818cf8; margin-bottom: 10px;
+}
+.hosting-steps { list-style: none; }
+.hosting-steps li {
+  font-size: 11px; color: #5a6494; line-height: 1.8;
+  padding: 4px 0; border-bottom: 1px solid rgba(99,102,241,0.08);
+  display: flex; gap: 8px;
+}
+.hosting-steps li:last-child { border-bottom: none; }
+.hosting-steps .hnum {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 18px; height: 18px; border-radius: 50%;
+  background: rgba(99,102,241,0.15); color: #818cf8;
+  font-size: 9px; font-weight: 800; flex-shrink: 0; margin-top: 2px;
+}
+
 /* ═══ RESPONSIVE ═══ */
 @media (max-width: 680px) {
   .lb-grid { grid-template-columns: repeat(3, 1fr); }
@@ -465,6 +503,7 @@ code {
 <body>
 <div id="app">
 
+  <!-- HEADER -->
   <div class="header">
     <div class="hdr-left">
       <div class="eyebrow">IPL MATKA 2026 · DUBAI</div>
@@ -478,15 +517,20 @@ code {
     </div>
   </div>
 
+  <!-- STATUS -->
   <div class="status" id="status-bar"></div>
 
+  <!-- LEADERBOARD -->
   <div class="section-label">🏆 PANTER LEADERBOARD — FANTASY POINTS</div>
   <div class="lb-grid" id="leaderboard"></div>
 
+  <!-- PANTER TABS -->
   <div class="panter-tabs" id="panter-tabs"></div>
 
+  <!-- PANTER DETAIL -->
   <div id="panter-detail"></div>
 
+  <!-- H2H TABLE -->
   <div class="h2h-section">
     <div class="section-label">💰 H2H TEAM WINS — AED 55 PER WIN</div>
     <div class="h2h-wrap">
@@ -494,6 +538,7 @@ code {
     </div>
   </div>
 
+  <!-- DATA COVERAGE PANEL -->
   <div class="coverage-panel" id="coverage-panel" style="display:none">
     <div class="coverage-title">
       📊 DATA COVERAGE — SQUAD PLAYERS
@@ -506,33 +551,73 @@ code {
     <div class="coverage-fuzzy" id="cov-fuzzy"></div>
   </div>
 
+  <!-- HOSTING GUIDE -->
+  <div class="hosting-guide">
+    <div class="hosting-title">🌐 HOW TO SHARE THIS WITH YOUR FRIENDS</div>
+    <ul class="hosting-steps">
+      <li><span class="hnum">1</span> Go to <strong style="color:#818cf8">netlify.com</strong> → sign up free → click "Add new site" → "Deploy manually"</li>
+      <li><span class="hnum">2</span> Download this HTML file → drag &amp; drop onto the Netlify deploy area</li>
+      <li><span class="hnum">3</span> Netlify gives you a free URL like <strong style="color:#818cf8">ipl-matka-2026.netlify.app</strong> — share it with all Panters</li>
+      <li><span class="hnum">4</span> To update: just drag &amp; drop the same file again (or rename it first) — no coding needed</li>
+      <li><span class="hnum">5</span> The Sheet ID is saved in each browser's local storage — each user runs Setup once on their device</li>
+    </ul>
+  </div>
+
 </div>
 
+<!-- SETUP MODAL -->
 <div class="modal-overlay" id="modal-overlay">
   <div class="modal">
     <div class="modal-title">⚙ GOOGLE SHEETS SETUP</div>
     <p class="modal-desc">
-      Connect your Google Sheet as the data source. We now use a direct connection so you only need to paste your Sheet ID!
+      Connect a Google Sheet as your data source. You update the sheet with match stats once per day — 
+      this app reads it and calculates all fantasy points automatically.
     </p>
 
     <div class="step-block">
-      <div class="step-hdr"><div class="step-num">1</div><div class="step-title">Ensure Sheet is Viewable</div></div>
+      <div class="step-hdr"><div class="step-num">1</div><div class="step-title">Set up your two Google Sheet tabs</div></div>
       <div class="step-body">
-        Ensure your Google Sheet is set to <strong>"Anyone with the link"</strong> can view. 
+        Your sheet needs two tabs. Tab 1 row headers:<br>
+        <div class="code-block">team,wins</div>
+        Tab 2 row headers:<br>
+        <div class="code-block">name,mt,rn,bl,f4,s6,m25,fi,m75,hu,dk,w2,w3,w4,w5,wk,ov,rc,md,db,bw,ct,st,dro,iro</div>
       </div>
     </div>
 
     <div class="step-block">
-      <div class="step-hdr"><div class="step-num">2</div><div class="step-title">Check Tab Names</div></div>
+      <div class="step-hdr"><div class="step-num">2</div><div class="step-title">Publish the WINS tab — get its URL</div></div>
       <div class="step-body">
-        Ensure your tabs at the bottom are named exactly <strong>wins</strong> and <strong>stats</strong>.
+        On Samsung tablet: tap <strong>⋮ → Share &amp; export → Publish to web</strong><br>
+        → Select your <strong>wins tab</strong> from the dropdown<br>
+        → Select <strong>CSV</strong><br>
+        → Tap <strong>Publish</strong> → copy the full URL it shows you<br><br>
+        URL will look like: <code>https://docs.google.com/spreadsheets/d/e/2PACX-.../pub?gid=0&amp;single=true&amp;output=csv</code>
       </div>
     </div>
 
     <div class="step-block">
-      <div class="step-hdr"><div class="step-num">3</div><div class="step-title">Paste your Sheet ID</div></div>
-      <div class="step-body" style="margin-bottom:6px">Copy the ID from your Google Sheet URL:</div>
-      <input class="modal-input" type="text" id="sheet-id-input"  placeholder="e.g. 1IXRCwPXBg6bzRhdaJH9JWcaAfqpYIUnv6H7kRhyQLTw" />
+      <div class="step-hdr"><div class="step-num">3</div><div class="step-title">Publish the STATS tab — get its URL</div></div>
+      <div class="step-body">
+        Go back to <strong>⋮ → Share &amp; export → Publish to web</strong><br>
+        → This time select your <strong>stats tab</strong> from the dropdown<br>
+        → Select <strong>CSV</strong><br>
+        → Tap <strong>Publish</strong> → copy the full URL it shows you
+      </div>
+    </div>
+
+    <div class="step-block">
+      <div class="step-hdr"><div class="step-num">4</div><div class="step-title">Paste both URLs below</div></div>
+      <div class="step-body" style="margin-bottom:6px">Paste the full URL for each tab:</div>
+      <input class="modal-input" type="text" id="wins-url-input"  placeholder="WINS tab URL — https://docs.google.com/spreadsheets/d/e/2PACX-.../pub?..." />
+      <input class="modal-input" type="text" id="stats-url-input" placeholder="STATS tab URL — https://docs.google.com/spreadsheets/d/e/2PACX-.../pub?..." />
+    </div>
+
+    <div class="template-info">
+      <p>
+        💡 <strong style="color:var(--teal)">Tip:</strong> You need two separate published URLs — one for each tab.
+        Go through Publish to web twice, selecting a different tab each time.
+        Stats can be filled from <strong>espncricinfo.com → IPL 2026 → Statistics</strong>.
+      </p>
     </div>
 
     <div class="modal-actions">
@@ -542,13 +627,15 @@ code {
   </div>
 </div>
 
+<!-- ═══ JAVASCRIPT ═══ -->
 <script>
 /* ═══════════════════════════════════════════════════
    CONFIG & CONSTANTS
 ══════════════════════════════════════════════════ */
 const H2H_PER_WIN = 55;
-const CACHE_KEY = 'ipl-matka-2026-cache-v4';
-const SHEET_ID_KEY = 'ipl-matka-sheet-id';
+const CACHE_KEY = 'ipl-matka-2026-cache-v3';
+const WINS_URL_KEY  = 'ipl-matka-wins-url';
+const STATS_URL_KEY = 'ipl-matka-stats-url';
 
 const TEAMS = {
   "Lucknow Super Giants": "LSG",
@@ -695,26 +782,39 @@ const PANTERS = [
 ];
 
 /* ═══════════════════════════════════════════════════
-   SQUAD INDEX
+   SQUAD INDEX — built once from PANTERS
+   Used to filter & match incoming sheet data
 ══════════════════════════════════════════════════ */
+
+// Flat list of every player across all squads (exact names as defined above)
 const SQUAD_PLAYERS = PANTERS.flatMap(p =>
   [...p.playing11, ...p.bench].map(pl => ({ player: pl.player, panter: p.name, role: pl.role }))
 );
 
+// Set of exact squad names for O(1) lookup
 const SQUAD_NAMES = new Set(SQUAD_PLAYERS.map(s => s.player));
+
+// Case-insensitive lookup map: lowercased name → exact squad name
+// Handles variations like "V Kohli" → "Virat Kohli" or "KL Rahul" → "KL Rahul"
 const SQUAD_LOOKUP = new Map();
 SQUAD_PLAYERS.forEach(({ player }) => {
-  SQUAD_LOOKUP.set(player.toLowerCase(), player);
-  SQUAD_LOOKUP.set(player.toLowerCase().replace(/\./g, ''), player);
+  SQUAD_LOOKUP.set(player.toLowerCase(), player);        // exact (lowercased)
+  SQUAD_LOOKUP.set(player.toLowerCase().replace(/\./g, ''), player); // strip dots
 });
 
+// Try to match a sheet row name against squad names.
+// Returns the canonical squad name if found, null otherwise.
 function matchSquadName(sheetName) {
   if (!sheetName) return null;
   const raw = sheetName.trim();
+  // 1. Direct match (case-insensitive)
   let found = SQUAD_LOOKUP.get(raw.toLowerCase());
   if (found) return found;
+  // 2. Strip dots and try again
   found = SQUAD_LOOKUP.get(raw.toLowerCase().replace(/\./g, ''));
   if (found) return found;
+  // 3. Check if any squad name contains the sheet name or vice-versa
+  //    e.g. sheet has "Bumrah" → matches "Jasprit Bumrah"
   const rawLow = raw.toLowerCase();
   for (const [key, canonical] of SQUAD_LOOKUP) {
     if (key.includes(rawLow) || rawLow.includes(key)) return canonical;
@@ -726,7 +826,13 @@ function matchSquadName(sheetName) {
    STATE
 ══════════════════════════════════════════════════ */
 const state = {
-  stats: {}, wins: {}, lastUpdated: null, activePanter: 0, loading: false, hasData: false, matchReport: null
+  stats: {},
+  wins: {},
+  lastUpdated: null,
+  activePanter: 0,
+  loading: false,
+  hasData: false,
+  matchReport: null   // populated after each refresh: { matched, missing, fuzzy }
 };
 
 /* ═══════════════════════════════════════════════════
@@ -737,15 +843,17 @@ function calcPoints(r, role) {
   let p = 0;
   const rn = +(r.rn || 0), bl = +(r.bl || 0);
 
-  p += rn;
-  p += +(r.f4 || 0) * 4;
-  p += +(r.s6 || 0) * 6;
-  p += +(r.m25 || 0) * 8;
-  p += +(r.fi || 0) * 12;
-  p += +(r.m75 || 0) * 16;
-  p += +(r.hu || 0) * 20;
-  if (role !== 'BOWL' && r.dk) p -= +(r.dk) * 2;
+  // ── Batting ──
+  p += rn;                               // +1 per run
+  p += +(r.f4 || 0) * 4;               // boundary bonus
+  p += +(r.s6 || 0) * 6;               // six bonus
+  p += +(r.m25 || 0) * 8;             // 25-run milestone
+  p += +(r.fi || 0) * 12;             // 50-run milestone
+  p += +(r.m75 || 0) * 16;            // 75-run milestone
+  p += +(r.hu || 0) * 20;             // 100-run milestone
+  if (role !== 'BOWL' && r.dk) p -= +(r.dk) * 2;  // duck penalty
 
+  // Strike rate (season average — applied once)
   if (rn >= 10 || bl >= 5) {
     const sr = bl > 0 ? (rn / bl) * 100 : 0;
     if      (sr >= 190) p += 6;
@@ -756,15 +864,17 @@ function calcPoints(r, role) {
     else if (sr < 80)  p -= 2;
   }
 
-  p += +(r.wk || 0) * 30;
-  p += +(r.bw || 0) * 8;
-  p += +(r.db || 0) * 1;
-  p += +(r.md || 0) * 16;
-  p += +(r.w2 || 0) * 4;
-  p += +(r.w3 || 0) * 8;
-  p += +(r.w4 || 0) * 12;
-  p += +(r.w5 || 0) * 16;
+  // ── Bowling ──
+  p += +(r.wk || 0) * 30;             // base wicket
+  p += +(r.bw || 0) * 8;              // bowled/LBW bonus
+  p += +(r.db || 0) * 1;              // dot balls
+  p += +(r.md || 0) * 16;            // maidens
+  p += +(r.w2 || 0) * 4;             // 2-wkt haul
+  p += +(r.w3 || 0) * 8;             // 3-wkt haul
+  p += +(r.w4 || 0) * 12;            // 4-wkt haul
+  p += +(r.w5 || 0) * 16;            // 5-wkt haul
 
+  // Economy rate (season average)
   const ov = +(r.ov || 0), rc = +(r.rc || 0);
   if (ov >= 1) {
     const ec = rc / ov;
@@ -776,8 +886,9 @@ function calcPoints(r, role) {
     else if (ec >= 14) p -= 2;
   }
 
+  // ── Fielding ──
   p += +(r.ct || 0) * 8;
-  if (+(r.ct || 0) >= 3) p += 4;
+  if (+(r.ct || 0) >= 3) p += 4;      // 3-catch bonus
   p += +(r.st || 0) * 12;
   p += +(r.dro || 0) * 12;
   p += +(r.iro || 0) * 6;
@@ -792,12 +903,18 @@ function effectivePts(pl) {
   return base;
 }
 
-function panterXI(panter) { return panter.playing11.reduce((s, pl) => s + effectivePts(pl), 0); }
-function panterWins(panter) { return panter.teams.reduce((s, t) => s + (+(state.wins[t] || 0)), 0); }
-function panterH2H(panter) { return panterWins(panter) * H2H_PER_WIN; }
+function panterXI(panter) {
+  return panter.playing11.reduce((s, pl) => s + effectivePts(pl), 0);
+}
+function panterWins(panter) {
+  return panter.teams.reduce((s, t) => s + (+(state.wins[t] || 0)), 0);
+}
+function panterH2H(panter) {
+  return panterWins(panter) * H2H_PER_WIN;
+}
 
 /* ═══════════════════════════════════════════════════
-   DATA FETCHING — Direct CSV Fetching
+   DATA FETCHING — Google Sheets CSV
 ══════════════════════════════════════════════════ */
 function smartSplit(line) {
   const result = [];
@@ -826,32 +943,55 @@ function parseCSV(text) {
   }).filter(r => r[headers[0]]);
 }
 
-async function fetchUrl(label, url) {
-  try {
-    const resp = await fetch(url);
-    if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
-    const text = await resp.text();
-    if (text.includes('accounts.google.com') || text.includes('ServiceLogin')) {
-      throw new Error(`Your Google Sheet is not public. Please set the share settings to "Anyone with the link".`);
+// CORS proxies to try in order — if one fails, next is tried
+const PROXIES = [
+  url => `https://corsproxy.io/?url=${encodeURIComponent(url)}`,
+  url => `https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`,
+  url => url   // direct as last resort
+];
+
+async function fetchUrl(label, rawUrl) {
+  const url = rawUrl.trim();
+  if (!url) throw new Error(`No URL set for "${label}". Click Setup Sheet and paste both URLs.`);
+
+  let lastError = null;
+  for (const proxy of PROXIES) {
+    const proxyUrl = proxy(url);
+    try {
+      const resp = await fetch(proxyUrl);
+      if (!resp.ok) {
+        lastError = `HTTP ${resp.status}`;
+        continue;  // try next proxy
+      }
+      const text = await resp.text();
+      if (!text || text.trim().length === 0) {
+        lastError = 'empty response';
+        continue;
+      }
+      if (text.includes('accounts.google.com') || text.includes('ServiceLogin')) {
+        throw new Error(`"${label}" sheet is not published publicly. In Google Sheets: ⋮ → Share & export → Publish to web → select the tab → CSV → Publish.`);
+      }
+      return parseCSV(text);
+    } catch(e) {
+      if (e.message.includes('not published')) throw e;  // don't retry auth errors
+      lastError = e.message;
+      continue;
     }
-    return parseCSV(text);
-  } catch(e) {
-    throw new Error(`Could not load "${label}" (${e.message}). Ensure tab names are exactly "wins" and "stats".`);
   }
+  throw new Error(`Could not load "${label}" after trying multiple methods (${lastError}). Make sure the sheet tab is published: ⋮ → Share & export → Publish to web → select tab → CSV → Publish.`);
 }
 
 async function doRefresh() {
-  const sheetId = localStorage.getItem(SHEET_ID_KEY);
-  if (!sheetId) {
+  if (!localStorage.getItem(WINS_URL_KEY) || !localStorage.getItem(STATS_URL_KEY)) {
     openSetup(); return;
   }
 
   state.loading = true;
-  showStatus('⏳ Fetching live data directly from Google Sheets...', false);
+  showStatus('⏳ Fetching from Google Sheets…', false);
   document.getElementById('btn-refresh').disabled = true;
 
-  const winsUrl  = `https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?tqx=out:csv&sheet=wins`;
-  const statsUrl = `https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?tqx=out:csv&sheet=stats`;
+  const winsUrl  = localStorage.getItem(WINS_URL_KEY)  || '';
+  const statsUrl = localStorage.getItem(STATS_URL_KEY) || '';
 
   try {
     const [winsData, statsData] = await Promise.all([
@@ -859,6 +999,7 @@ async function doRefresh() {
       fetchUrl('stats', statsUrl)
     ]);
 
+    // Process wins
     const newWins = {};
     Object.keys(TEAMS).forEach(t => { newWins[t] = 0; });
     winsData.forEach(row => {
@@ -869,8 +1010,11 @@ async function doRefresh() {
       if (teamKey) newWins[teamKey] = parseInt(row.wins) || 0;
     });
 
+    // ── Process stats: SQUAD PLAYERS ONLY ──────────────────────────────
+    // Even if the sheet has 200+ players, we only store the 75 in our squads.
+    // Uses fuzzy/case-insensitive matching so minor name differences still work.
     const newStats = {};
-    const fuzzyMatches = [];
+    const fuzzyMatches = [];   // track where we had to fuzzy-match
     const sheetNames = new Set();
 
     statsData.forEach(row => {
@@ -880,34 +1024,58 @@ async function doRefresh() {
 
       const canonical = matchSquadName(sheetName);
       if (canonical) {
-        newStats[canonical] = { ...row, name: canonical };
+        newStats[canonical] = { ...row, name: canonical };  // store under canonical name
         if (canonical.toLowerCase() !== sheetName.toLowerCase()) {
           fuzzyMatches.push({ sheet: sheetName, matched: canonical });
         }
       }
+      // Non-squad players are silently ignored — no error, just not stored
     });
 
-    const matched = SQUAD_PLAYERS.filter(s => newStats[s.player] && newStats[s.player].mt > 0).map(s => s.player);
-    const missing = SQUAD_PLAYERS.filter(s => !newStats[s.player] || !newStats[s.player].mt).map(s => s.player);
+    // Build match report: which squad players got data, which are still missing
+    const matched = SQUAD_PLAYERS.filter(s => newStats[s.player] && newStats[s.player].mt > 0)
+                                  .map(s => s.player);
+    const missing = SQUAD_PLAYERS.filter(s => !newStats[s.player] || !newStats[s.player].mt)
+                                  .map(s => s.player);
 
     state.wins = newWins;
     state.stats = newStats;
     state.lastUpdated = new Date().toLocaleString('en-AE', { timeZone: 'Asia/Dubai' });
     state.hasData = true;
-    state.matchReport = { totalSheet: sheetNames.size, matched, missing, fuzzy: fuzzyMatches };
+    state.matchReport = {
+      totalSheet: sheetNames.size,
+      matched,
+      missing,
+      fuzzy: fuzzyMatches
+    };
 
+    // ── Show match report ───────────────────────────────────────────────
     const r = state.matchReport;
-    const fuzzyNote = r.fuzzy.length > 0 ? ` · Fuzzy-matched: ${r.fuzzy.map(f => `"${f.sheet}"→"${f.matched}"`).join(', ')}` : '';
-    const missingNote = r.missing.length > 0 ? ` · ⚠ No data yet for: ${r.missing.join(', ')}` : ' · ✅ All 75 squad players have data!';
+    const fuzzyNote = r.fuzzy.length > 0
+      ? ` · Fuzzy-matched: ${r.fuzzy.map(f => `"${f.sheet}"→"${f.matched}"`).join(', ')}`
+      : '';
+    const missingNote = r.missing.length > 0
+      ? ` · ⚠ No data yet for: ${r.missing.join(', ')}`
+      : ' · ✅ All 75 squad players have data!';
 
     if (r.missing.length > 0 || r.fuzzy.length > 0) {
-      showStatus(`✅ Loaded ${r.matched.length}/${SQUAD_PLAYERS.length} squad players from ${r.totalSheet} sheet rows.${fuzzyNote}${missingNote}`, false);
+      showStatus(
+        `✅ Loaded ${r.matched.length}/${SQUAD_PLAYERS.length} squad players from ${r.totalSheet} sheet rows.${fuzzyNote}${missingNote}`,
+        false
+      );
     } else {
       hideStatus();
     }
 
     render();
-    try { localStorage.setItem(CACHE_KEY, JSON.stringify({ wins: state.wins, stats: state.stats, lastUpdated: state.lastUpdated, matchReport: state.matchReport })); } catch(e) {}
+
+    // Save cache
+    try {
+      localStorage.setItem(CACHE_KEY, JSON.stringify({
+        wins: state.wins, stats: state.stats, lastUpdated: state.lastUpdated,
+        matchReport: state.matchReport
+      }));
+    } catch(e) {}
   } catch(e) {
     showStatus('❌ ' + e.message, true);
   }
@@ -937,7 +1105,9 @@ function loadCache() {
 ══════════════════════════════════════════════════ */
 function ini(name) {
   const parts = name.replace(/\./g, ' ').trim().split(/\s+/);
-  return parts.length === 1 ? parts[0].substring(0, 2).toUpperCase() : (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
+  return parts.length === 1
+    ? parts[0].substring(0, 2).toUpperCase()
+    : (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
 }
 
 function showStatus(msg, isError) {
@@ -946,21 +1116,30 @@ function showStatus(msg, isError) {
   el.style.display = 'block';
   el.className = 'status' + (isError ? ' error' : '');
 }
-function hideStatus() { document.getElementById('status-bar').style.display = 'none'; }
+function hideStatus() {
+  document.getElementById('status-bar').style.display = 'none';
+}
 
 function openSetup() {
-  document.getElementById('sheet-id-input').value = localStorage.getItem(SHEET_ID_KEY) || '';
+  document.getElementById('wins-url-input').value  = localStorage.getItem(WINS_URL_KEY)  || '';
+  document.getElementById('stats-url-input').value = localStorage.getItem(STATS_URL_KEY) || '';
   document.getElementById('modal-overlay').classList.add('open');
 }
-function closeSetup() { document.getElementById('modal-overlay').classList.remove('open'); }
+function closeSetup() {
+  document.getElementById('modal-overlay').classList.remove('open');
+}
 function saveUrls() {
-  const sheetId = document.getElementById('sheet-id-input').value.trim();
-  if (!sheetId)  { alert('Please paste your Sheet ID.'); return; }
-  localStorage.setItem(SHEET_ID_KEY, sheetId);
+  const winsUrl  = document.getElementById('wins-url-input').value.trim();
+  const statsUrl = document.getElementById('stats-url-input').value.trim();
+  if (!winsUrl)  { alert('Please paste the published URL for your WINS tab.'); return; }
+  if (!statsUrl) { alert('Please paste the published URL for your STATS tab.'); return; }
+  localStorage.setItem(WINS_URL_KEY,  winsUrl);
+  localStorage.setItem(STATS_URL_KEY, statsUrl);
   closeSetup();
   doRefresh();
 }
 
+// Close modal when clicking overlay
 document.getElementById('modal-overlay').addEventListener('click', function(e) {
   if (e.target === this) closeSetup();
 });
@@ -978,7 +1157,8 @@ function render() {
   const updEl = document.getElementById('updated-tag');
   if (state.lastUpdated) {
     updEl.textContent = '🕐 ' + state.lastUpdated;
-    document.getElementById('hdr-sub').textContent = 'Powered by Google Sheets · Refreshes daily · Points auto-calculated';
+    document.getElementById('hdr-sub').textContent =
+      'Powered by Google Sheets · Refreshes daily · Points auto-calculated';
   } else {
     updEl.textContent = '';
   }
@@ -986,7 +1166,9 @@ function render() {
 
 function renderLeaderboard() {
   const medals = ['🥇','🥈','🥉','',''];
-  const sorted = [...PANTERS].map((p, i) => ({ p, i, pts: panterXI(p) })).sort((a, b) => b.pts - a.pts);
+  const sorted = [...PANTERS]
+    .map((p, i) => ({ p, i, pts: panterXI(p) }))
+    .sort((a, b) => b.pts - a.pts);
 
   document.getElementById('leaderboard').innerHTML = sorted.map((item, rank) => `
     <div class="lb-card ${rank === 0 ? 'rank-1' : ''} ${item.i === state.activePanter ? 'active' : ''} animate-in"
@@ -1003,19 +1185,27 @@ function renderLeaderboard() {
 
 function renderPanterTabs() {
   document.getElementById('panter-tabs').innerHTML = PANTERS.map((p, i) => `
-    <button class="ptab ${i === state.activePanter ? 'active' : ''}" onclick="selectPanter(${i})">${p.name}</button>
+    <button class="ptab ${i === state.activePanter ? 'active' : ''}" onclick="selectPanter(${i})">
+      ${p.name}
+    </button>
   `).join('');
 }
 
 function renderPanterDetail(idx) {
   const p = PANTERS[idx];
+
+  // Build player row HTML
   function playerRow(pl, i, isBench) {
     const stats = state.stats[pl.player] || null;
     const basePts = calcPoints(stats, pl.role);
     const effPts  = effectivePts(pl);
-    const isC  = pl.tag === 'C', isVC = pl.tag === 'VC';
+    const isC  = pl.tag === 'C';
+    const isVC = pl.tag === 'VC';
     const color = ROLE_COLORS[pl.role] || '#888';
-    const mt = stats ? +(stats.mt||0) : 0, rn = stats ? +(stats.rn||0) : 0, wk = stats ? +(stats.wk||0) : 0, ct = stats ? +(stats.ct||0) : 0;
+    const mt = stats ? +(stats.mt||0) : 0;
+    const rn = stats ? +(stats.rn||0) : 0;
+    const wk = stats ? +(stats.wk||0) : 0;
+    const ct = stats ? +(stats.ct||0) : 0;
 
     let rowCls = 'p-row ';
     if (isBench) { rowCls += 'brow ' + (i % 2 === 0 ? 'ev' : 'od'); }
@@ -1025,8 +1215,18 @@ function renderPanterDetail(idx) {
 
     const displayPts = isBench ? basePts : effPts;
     const showBase = !isBench && (isC || isVC) && basePts > 0;
-    const nameTag = isC ? `<span class="inlineC" style="background:rgba(255,215,0,0.1);color:var(--gold)">C</span>` : isVC ? `<span class="inlineC" style="background:rgba(192,192,192,0.08);color:#c0c0c0">VC</span>` : '';
-    const multiTag = isC ? `<div class="multi-tag" style="color:var(--gold)">×2</div>` : isVC ? `<div class="multi-tag" style="color:#94a3b8">×1.5</div>` : `<div style="min-width:22px"></div>`;
+
+    const nameTag = isC
+      ? `<span class="inlineC" style="background:rgba(255,215,0,0.1);color:var(--gold)">C</span>`
+      : isVC
+      ? `<span class="inlineC" style="background:rgba(192,192,192,0.08);color:#c0c0c0">VC</span>`
+      : '';
+
+    const multiTag = isC
+      ? `<div class="multi-tag" style="color:var(--gold)">×2</div>`
+      : isVC
+      ? `<div class="multi-tag" style="color:#94a3b8">×1.5</div>`
+      : `<div style="min-width:22px"></div>`;
 
     return `
       <div class="${rowCls}" style="border-left:3px solid ${color}${isBench?'40':''}">
@@ -1050,7 +1250,9 @@ function renderPanterDetail(idx) {
     `;
   }
 
-  const xiTotal = panterXI(p), wins = panterWins(p), h2h = panterH2H(p);
+  const xiTotal = panterXI(p);
+  const wins    = panterWins(p);
+  const h2h     = panterH2H(p);
 
   document.getElementById('panter-detail').innerHTML = `
     <div class="panter-hdr animate-in">
@@ -1059,19 +1261,28 @@ function renderPanterDetail(idx) {
         <div class="p-name">${p.name.toUpperCase()}</div>
       </div>
       <div class="p-tags">
-        ${p.teams.map((t, i) => `<div class="tag tag-t${i+1}">${TEAMS[t]} — ${+(state.wins[t]||0)}W</div>`).join('')}
+        ${p.teams.map((t, i) => `
+          <div class="tag tag-t${i+1}">${TEAMS[t]} — ${+(state.wins[t]||0)}W</div>
+        `).join('')}
         <div class="tag tag-bz">BAAZIGAR: ${p.baazigar}</div>
       </div>
     </div>
 
     <div class="detail-cols">
+      <!-- Playing XI -->
       <div>
-        <div class="col-hdr col-xi">PLAYING XI<span style="font-size:7px;color:var(--muted);letter-spacing:0;margin-left:4px">C=×2 · VC=×1.5</span></div>
+        <div class="col-hdr col-xi">
+          PLAYING XI
+          <span style="font-size:7px;color:var(--muted);letter-spacing:0;margin-left:4px">C=×2 · VC=×1.5</span>
+        </div>
         ${p.playing11.map((pl, i) => playerRow(pl, i, false)).join('')}
       </div>
+
+      <!-- Bench + Summary -->
       <div>
         <div class="col-hdr col-bench">BENCH (4)</div>
         ${p.bench.map((pl, i) => playerRow(pl, i, true)).join('')}
+
         <div class="sum-boxes">
           <div class="sum-box sf">
             <div class="sum-label t">FANTASY TOTAL</div>
@@ -1083,16 +1294,33 @@ function renderPanterDetail(idx) {
             <div class="sum-val g">AED ${h2h}</div>
             <div class="sum-sub">${wins} wins × AED ${H2H_PER_WIN}</div>
             <div class="sum-teams">
-              ${p.teams.map((t, i) => `<span class="sum-team" style="color:${i===0?'#60a5fa':'#f472b6'}">${TEAMS[t]}: ${+(state.wins[t]||0)}W</span>`).join('')}
+              ${p.teams.map((t, i) => `
+                <span class="sum-team" style="color:${i===0?'#60a5fa':'#f472b6'}">
+                  ${TEAMS[t]}: ${+(state.wins[t]||0)}W
+                </span>
+              `).join('')}
             </div>
           </div>
         </div>
+
         <div class="score-legend">
           <div style="font-size:8px;color:var(--gold);letter-spacing:2px;font-weight:700;margin-bottom:7px">SCORING REFERENCE</div>
           <div class="score-grid">
-            <div>🏏 +1/run +4/4 +6/6</div><div>🥎 +30/wkt +8 b-lbw</div><div>🧤 +8/ct +12/st +12/dro</div>
-            <div>25:+8 50:+12 75:+16 100:+20</div><div>+1/dot +16/maiden, eco bonus</div><div>SR & haul bonuses apply</div>
+            <div>🏏 +1/run +4/4 +6/6</div>
+            <div>🥎 +30/wkt +8 b-lbw</div>
+            <div>🧤 +8/ct +12/st +12/dro</div>
+            <div>25:+8 50:+12 75:+16 100:+20</div>
+            <div>+1/dot +16/maiden, eco bonus</div>
+            <div>SR & haul bonuses apply</div>
           </div>
+        </div>
+        <div class="role-legend">
+          ${Object.entries(ROLE_COLORS).map(([r, c]) => `
+            <div class="legend-item">
+              <div class="legend-dot" style="background:${c}"></div>
+              <span class="legend-lbl">${r}</span>
+            </div>
+          `).join('')}
         </div>
       </div>
     </div>
@@ -1104,10 +1332,30 @@ function renderH2HTable() {
   const totalWins = Object.values(state.wins).reduce((s, v) => s + (+v||0), 0);
 
   document.getElementById('h2h-table').innerHTML = `
-    <thead><tr><th>PANTER</th><th>TEAMS</th><th>TOTAL WINS</th><th>H2H EARNINGS</th></tr></thead>
+    <thead>
+      <tr>
+        <th>PANTER</th>
+        <th>TEAMS</th>
+        <th>TOTAL WINS</th>
+        <th>H2H EARNINGS</th>
+      </tr>
+    </thead>
     <tbody>
-      ${sorted.map(p => `<tr><td class="td-name">${p.name}</td><td class="td-teams">${p.teams.map(t => `${TEAMS[t]}: ${+(state.wins[t]||0)}W`).join(' · ')}</td><td class="td-wins">${panterWins(p)} wins</td><td class="td-aed">AED ${panterH2H(p)}</td></tr>`).join('')}
-      ${totalWins > 0 ? `<tr style="border-top:2px solid rgba(255,215,0,0.15)"><td colspan="2" style="color:var(--muted);font-size:10px;font-style:italic">Total matches played</td><td class="td-wins">${totalWins / 2 | 0} matches</td><td class="td-aed" style="color:var(--muted)">AED ${sorted.reduce((s,p) => s + panterH2H(p), 0)}</td></tr>` : ''}
+      ${sorted.map(p => `
+        <tr>
+          <td class="td-name">${p.name}</td>
+          <td class="td-teams">${p.teams.map(t => `${TEAMS[t]}: ${+(state.wins[t]||0)}W`).join(' · ')}</td>
+          <td class="td-wins">${panterWins(p)} wins</td>
+          <td class="td-aed">AED ${panterH2H(p)}</td>
+        </tr>
+      `).join('')}
+      ${totalWins > 0 ? `
+        <tr style="border-top:2px solid rgba(255,215,0,0.15)">
+          <td colspan="2" style="color:var(--muted);font-size:10px;font-style:italic">Total matches played</td>
+          <td class="td-wins">${totalWins / 2 | 0} matches</td>
+          <td class="td-aed" style="color:var(--muted)">AED ${sorted.reduce((s,p) => s + panterH2H(p), 0)}</td>
+        </tr>
+      ` : ''}
     </tbody>
   `;
 }
@@ -1118,24 +1366,63 @@ function renderCoveragePanel() {
   if (!state.hasData || !r) { panel.style.display = 'none'; return; }
   panel.style.display = 'block';
 
-  const total = SQUAD_PLAYERS.length, matchedCount = r.matched.length, pct = Math.round((matchedCount / total) * 100);
+  const total = SQUAD_PLAYERS.length;
+  const matchedCount = r.matched.length;
+  const pct = Math.round((matchedCount / total) * 100);
 
   document.getElementById('cov-bar').style.width = pct + '%';
   document.getElementById('cov-pct').textContent = `${matchedCount} / ${total} players · ${pct}%`;
+
   document.getElementById('cov-stats').innerHTML = `
-    <div class="cov-stat"><div class="cov-stat-num" style="color:var(--green)">${matchedCount}</div><div class="cov-stat-lbl">MATCHED</div></div>
-    <div class="cov-stat"><div class="cov-stat-num" style="color:var(--amber)">${r.missing.length}</div><div class="cov-stat-lbl">NO DATA YET</div></div>
-    <div class="cov-stat"><div class="cov-stat-num" style="color:var(--blue)">${r.totalSheet}</div><div class="cov-stat-lbl">SHEET ROWS READ</div></div>
-    <div class="cov-stat"><div class="cov-stat-num" style="color:var(--purple)">${r.fuzzy.length}</div><div class="cov-stat-lbl">FUZZY MATCHED</div></div>
+    <div class="cov-stat">
+      <div class="cov-stat-num" style="color:var(--green)">${matchedCount}</div>
+      <div class="cov-stat-lbl">MATCHED</div>
+    </div>
+    <div class="cov-stat">
+      <div class="cov-stat-num" style="color:var(--amber)">${r.missing.length}</div>
+      <div class="cov-stat-lbl">NO DATA YET</div>
+    </div>
+    <div class="cov-stat">
+      <div class="cov-stat-num" style="color:var(--blue)">${r.totalSheet}</div>
+      <div class="cov-stat-lbl">SHEET ROWS READ</div>
+    </div>
+    <div class="cov-stat">
+      <div class="cov-stat-num" style="color:var(--purple)">${r.fuzzy.length}</div>
+      <div class="cov-stat-lbl">FUZZY MATCHED</div>
+    </div>
   `;
+
+  // Per-panter breakdown
   document.getElementById('cov-panter-grid').innerHTML = PANTERS.map(p => {
     const squad = [...p.playing11, ...p.bench];
     const squadMatched = squad.filter(pl => r.matched.includes(pl.player)).length;
     const cls = squadMatched === squad.length ? 'full' : squadMatched > 0 ? 'partial' : 'empty';
-    return `<div class="cov-panter-card"><div class="cov-panter-name">${p.name.toUpperCase()}</div><div class="cov-panter-count ${cls}">${squadMatched}/${squad.length}</div><div class="cov-panter-sub">players with data</div></div>`;
+    return `
+      <div class="cov-panter-card">
+        <div class="cov-panter-name">${p.name.toUpperCase()}</div>
+        <div class="cov-panter-count ${cls}">${squadMatched}/${squad.length}</div>
+        <div class="cov-panter-sub">players with data</div>
+      </div>
+    `;
   }).join('');
-  document.getElementById('cov-missing').innerHTML = r.missing.length > 0 ? `<strong>⚠ Players with no data in sheet yet:</strong> ${r.missing.join(' · ')}` : `<span style="color:var(--green)">✅ All squad players found in your sheet!</span>`;
-  document.getElementById('cov-fuzzy').innerHTML = r.fuzzy.length > 0 ? `🔗 Name auto-matched: ` + r.fuzzy.map(f => `"${f.sheet}" → "${f.matched}"`).join(' · ') : '';
+
+  // Missing players
+  if (r.missing.length > 0) {
+    document.getElementById('cov-missing').innerHTML =
+      `<strong>⚠ Players with no data in sheet yet:</strong> ${r.missing.join(' · ')}`;
+  } else {
+    document.getElementById('cov-missing').innerHTML =
+      `<span style="color:var(--green)">✅ All squad players found in your sheet!</span>`;
+  }
+
+  // Fuzzy matches
+  if (r.fuzzy.length > 0) {
+    document.getElementById('cov-fuzzy').innerHTML =
+      `🔗 Name auto-matched: ` +
+      r.fuzzy.map(f => `"${f.sheet}" → "${f.matched}"`).join(' · ');
+  } else {
+    document.getElementById('cov-fuzzy').innerHTML = '';
+  }
 }
 
 function selectPanter(idx) {
@@ -1151,13 +1438,19 @@ function selectPanter(idx) {
   const hasCache = loadCache();
   render();
 
-  if (!hasCache && !localStorage.getItem(SHEET_ID_KEY)) {
-    setTimeout(() => { showStatus('👋 Welcome! Click "Setup Sheet" to connect your Google Sheet and start tracking.', false); }, 500);
+  if (!hasCache && (!localStorage.getItem(WINS_URL_KEY) || !localStorage.getItem(STATS_URL_KEY))) {
+    // First time — show the no-sheet prompt
+    setTimeout(() => {
+      showStatus('👋 Welcome! Click "Setup Sheet" to connect your Google Sheet and start tracking.', false);
+    }, 500);
   }
 
-  if (state.lastUpdated && localStorage.getItem(SHEET_ID_KEY)) {
+  // Auto-refresh if cache is stale (> 22 hours) and sheet is configured
+  if (state.lastUpdated && localStorage.getItem(WINS_URL_KEY)) {
     const hoursSince = (Date.now() - new Date(state.lastUpdated)) / (1000 * 60 * 60);
-    if (hoursSince > 22) setTimeout(doRefresh, 800);
+    if (hoursSince > 22) {
+      setTimeout(doRefresh, 800);
+    }
   }
 })();
 </script>
