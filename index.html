@@ -570,54 +570,55 @@ code {
   <div class="modal">
     <div class="modal-title">⚙ GOOGLE SHEETS SETUP</div>
     <p class="modal-desc">
-      Connect a Google Sheet as your data source. You update the sheet with match stats once per day — 
-      this app reads it and calculates all fantasy points automatically.
+      Connect via Google Apps Script — a free tool built into Google Sheets that bypasses all browser restrictions. One-time setup, 3 minutes.
     </p>
 
     <div class="step-block">
-      <div class="step-hdr"><div class="step-num">1</div><div class="step-title">Set up your two Google Sheet tabs</div></div>
+      <div class="step-hdr"><div class="step-num">1</div><div class="step-title">Open Apps Script from your Google Sheet</div></div>
       <div class="step-body">
-        Your sheet needs two tabs. Tab 1 row headers:<br>
-        <div class="code-block">team,wins</div>
-        Tab 2 row headers:<br>
-        <div class="code-block">name,mt,rn,bl,f4,s6,m25,fi,m75,hu,dk,w2,w3,w4,w5,wk,ov,rc,md,db,bw,ct,st,dro,iro</div>
+        Open your Google Sheet on a <strong>desktop/laptop browser</strong>.<br>
+        Click <strong>Extensions</strong> in the top menu → click <strong>Apps Script</strong>.<br>
+        A new tab opens with a code editor.
       </div>
     </div>
 
     <div class="step-block">
-      <div class="step-hdr"><div class="step-num">2</div><div class="step-title">Publish the WINS tab — get its URL</div></div>
+      <div class="step-hdr"><div class="step-num">2</div><div class="step-title">Paste this code — replace everything in the editor</div></div>
       <div class="step-body">
-        On Samsung tablet: tap <strong>⋮ → Share &amp; export → Publish to web</strong><br>
-        → Select your <strong>wins tab</strong> from the dropdown<br>
-        → Select <strong>CSV</strong><br>
-        → Tap <strong>Publish</strong> → copy the full URL it shows you<br><br>
-        URL will look like: <code>https://docs.google.com/spreadsheets/d/e/2PACX-.../pub?gid=0&amp;single=true&amp;output=csv</code>
+        Select all existing code (Ctrl+A) → delete → paste this:
+        <div class="code-block">function doGet(e) {
+  var tab = e.parameter.tab || 'wins';
+  var ss = SpreadsheetApp.getActiveSpreadsheet();
+  var sheet = ss.getSheetByName(tab);
+  var data = sheet.getDataRange().getValues();
+  var csv = data.map(function(r){return r.join(',');}).join('\n');
+  return ContentService.createTextOutput(csv)
+    .setMimeType(ContentService.MimeType.TEXT);
+}</div>
       </div>
     </div>
 
     <div class="step-block">
-      <div class="step-hdr"><div class="step-num">3</div><div class="step-title">Publish the STATS tab — get its URL</div></div>
+      <div class="step-hdr"><div class="step-num">3</div><div class="step-title">Deploy as Web App</div></div>
       <div class="step-body">
-        Go back to <strong>⋮ → Share &amp; export → Publish to web</strong><br>
-        → This time select your <strong>stats tab</strong> from the dropdown<br>
-        → Select <strong>CSV</strong><br>
-        → Tap <strong>Publish</strong> → copy the full URL it shows you
+        Click <strong>Deploy</strong> (top right) → <strong>New deployment</strong><br>
+        → Click the ⚙ gear icon next to "Select type" → choose <strong>Web app</strong><br>
+        → Set "Execute as" to <strong>Me</strong><br>
+        → Set "Who has access" to <strong>Anyone</strong><br>
+        → Click <strong>Deploy</strong> → click <strong>Authorize access</strong><br>
+        → Choose your Google account → click <strong>Allow</strong><br>
+        → Copy the <strong>Web app URL</strong> shown (starts with script.google.com)
       </div>
     </div>
 
     <div class="step-block">
-      <div class="step-hdr"><div class="step-num">4</div><div class="step-title">Paste both URLs below</div></div>
-      <div class="step-body" style="margin-bottom:6px">Paste the full URL for each tab:</div>
-      <input class="modal-input" type="text" id="wins-url-input"  placeholder="WINS tab URL — https://docs.google.com/spreadsheets/d/e/2PACX-.../pub?..." />
-      <input class="modal-input" type="text" id="stats-url-input" placeholder="STATS tab URL — https://docs.google.com/spreadsheets/d/e/2PACX-.../pub?..." />
+      <div class="step-hdr"><div class="step-num">4</div><div class="step-title">Paste your Web App URL below</div></div>
+      <div class="step-body" style="margin-bottom:8px">Looks like: <code>https://script.google.com/macros/s/ABC123.../exec</code></div>
+      <input class="modal-input" type="text" id="script-url-input" placeholder="https://script.google.com/macros/s/YOUR_ID/exec" />
     </div>
 
     <div class="template-info">
-      <p>
-        💡 <strong style="color:var(--teal)">Tip:</strong> You need two separate published URLs — one for each tab.
-        Go through Publish to web twice, selecting a different tab each time.
-        Stats can be filled from <strong>espncricinfo.com → IPL 2026 → Statistics</strong>.
-      </p>
+      <p>💡 <strong style="color:var(--teal)">Why this works:</strong> Apps Script runs on Google's servers and delivers your sheet data directly to the app. It's free, instant, and permanent.</p>
     </div>
 
     <div class="modal-actions">
@@ -943,46 +944,28 @@ function parseCSV(text) {
   }).filter(r => r[headers[0]]);
 }
 
-// CORS proxies to try in order — if one fails, next is tried
-const PROXIES = [
-  url => `https://corsproxy.io/?url=${encodeURIComponent(url)}`,
-  url => `https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`,
-  url => url   // direct as last resort
-];
-
 async function fetchUrl(label, rawUrl) {
   const url = rawUrl.trim();
-  if (!url) throw new Error(`No URL set for "${label}". Click Setup Sheet and paste both URLs.`);
-
-  let lastError = null;
-  for (const proxy of PROXIES) {
-    const proxyUrl = proxy(url);
-    try {
-      const resp = await fetch(proxyUrl);
-      if (!resp.ok) {
-        lastError = `HTTP ${resp.status}`;
-        continue;  // try next proxy
-      }
-      const text = await resp.text();
-      if (!text || text.trim().length === 0) {
-        lastError = 'empty response';
-        continue;
-      }
-      if (text.includes('accounts.google.com') || text.includes('ServiceLogin')) {
-        throw new Error(`"${label}" sheet is not published publicly. In Google Sheets: ⋮ → Share & export → Publish to web → select the tab → CSV → Publish.`);
-      }
-      return parseCSV(text);
-    } catch(e) {
-      if (e.message.includes('not published')) throw e;  // don't retry auth errors
-      lastError = e.message;
-      continue;
-    }
+  if (!url) throw new Error(`No URL set for "${label}". Click Setup Sheet and paste your Apps Script URL.`);
+  let resp;
+  try {
+    resp = await fetch(url, { redirect: 'follow' });
+  } catch(e) {
+    throw new Error(`Network error fetching "${label}" — check your internet connection or Apps Script URL.`);
   }
-  throw new Error(`Could not load "${label}" after trying multiple methods (${lastError}). Make sure the sheet tab is published: ⋮ → Share & export → Publish to web → select tab → CSV → Publish.`);
+  if (!resp.ok) throw new Error(`Could not load "${label}" (HTTP ${resp.status}). Check that your Apps Script is deployed as "Anyone" access.`);
+  const text = await resp.text();
+  if (!text || text.trim().length === 0) throw new Error(`"${label}" returned empty data. Check your Google Sheet has data in the "${label}" tab.`);
+  // Detect if Google returned an HTML error page instead of CSV
+  const trimmed = text.trim();
+  if (trimmed.startsWith('<!DOCTYPE') || trimmed.startsWith('<html') || trimmed.startsWith('<HTML')) {
+    throw new Error(`"${label}" returned an error page instead of data. Re-deploy your Apps Script: Extensions → Apps Script → Deploy → New Deployment → Web app → Access: Anyone.`);
+  }
+  return parseCSV(text);
 }
 
 async function doRefresh() {
-  if (!localStorage.getItem(WINS_URL_KEY) || !localStorage.getItem(STATS_URL_KEY)) {
+  if (!localStorage.getItem(WINS_URL_KEY)) {
     openSetup(); return;
   }
 
@@ -990,13 +973,14 @@ async function doRefresh() {
   showStatus('⏳ Fetching from Google Sheets…', false);
   document.getElementById('btn-refresh').disabled = true;
 
-  const winsUrl  = localStorage.getItem(WINS_URL_KEY)  || '';
-  const statsUrl = localStorage.getItem(STATS_URL_KEY) || '';
+  const scriptUrl = localStorage.getItem(WINS_URL_KEY) || '';
 
   try {
+    // Fetch both tabs from single Apps Script URL
+    const sep = scriptUrl.includes('?') ? '&' : '?';
     const [winsData, statsData] = await Promise.all([
-      fetchUrl('wins', winsUrl),
-      fetchUrl('stats', statsUrl)
+      fetchUrl('wins',  scriptUrl + sep + 'tab=wins'),
+      fetchUrl('stats', scriptUrl + sep + 'tab=stats')
     ]);
 
     // Process wins
@@ -1121,20 +1105,21 @@ function hideStatus() {
 }
 
 function openSetup() {
-  document.getElementById('wins-url-input').value  = localStorage.getItem(WINS_URL_KEY)  || '';
-  document.getElementById('stats-url-input').value = localStorage.getItem(STATS_URL_KEY) || '';
+  document.getElementById('script-url-input').value = localStorage.getItem(WINS_URL_KEY) || '';
   document.getElementById('modal-overlay').classList.add('open');
 }
 function closeSetup() {
   document.getElementById('modal-overlay').classList.remove('open');
 }
 function saveUrls() {
-  const winsUrl  = document.getElementById('wins-url-input').value.trim();
-  const statsUrl = document.getElementById('stats-url-input').value.trim();
-  if (!winsUrl)  { alert('Please paste the published URL for your WINS tab.'); return; }
-  if (!statsUrl) { alert('Please paste the published URL for your STATS tab.'); return; }
-  localStorage.setItem(WINS_URL_KEY,  winsUrl);
-  localStorage.setItem(STATS_URL_KEY, statsUrl);
+  const scriptUrl = document.getElementById('script-url-input').value.trim();
+  if (!scriptUrl) { alert('Please paste your Apps Script URL.'); return; }
+  // Validate it looks like an Apps Script URL
+  if (!scriptUrl.includes('script.google.com/macros/s/')) {
+    alert('That doesn\'t look like an Apps Script URL.\n\nIt should look like:\nhttps://script.google.com/macros/s/ABC.../exec\n\nSee the setup instructions above.');
+    return;
+  }
+  localStorage.setItem(WINS_URL_KEY, scriptUrl);
   closeSetup();
   doRefresh();
 }
@@ -1438,7 +1423,7 @@ function selectPanter(idx) {
   const hasCache = loadCache();
   render();
 
-  if (!hasCache && (!localStorage.getItem(WINS_URL_KEY) || !localStorage.getItem(STATS_URL_KEY))) {
+  if (!hasCache && !localStorage.getItem(WINS_URL_KEY)) {
     // First time — show the no-sheet prompt
     setTimeout(() => {
       showStatus('👋 Welcome! Click "Setup Sheet" to connect your Google Sheet and start tracking.', false);
